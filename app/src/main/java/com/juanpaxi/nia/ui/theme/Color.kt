@@ -1,4 +1,4 @@
-package com.jupax.nia.ui.theme
+package com.juanpaxi.nia.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
