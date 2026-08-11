@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 private interface RetrofitNiaNetworkApi {
 
-    @GET(value = "topics")
+    @GET("topic.json")
     suspend fun getTopics(
         @Query("id") ids: List<String>?,
     ): NetworkResponse<List<NetworkTopic>>

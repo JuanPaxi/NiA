@@ -28,6 +28,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        missingDimensionStrategy("contentType", "prod")
     }
     buildTypes {
         release {
@@ -45,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:network"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.bundles.android.core)
     implementation(libs.bundles.compose.ui)
