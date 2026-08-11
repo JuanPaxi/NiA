@@ -30,12 +30,12 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             try {
                 val topics = networkDataSource.getTopics()
-                Log.d("GIST_TEST", "Success! Fetched ${topics.size} topics from Gist:")
+                Log.d("NETWORK_TEST", "Success! Fetched ${topics.size} topics:")
                 topics.forEach { topic ->
-                    Log.d("GIST_TEST", "Topic: ${topic.name}")
+                    Log.d("NETWORK_TEST", "Topic: ${topic.name}")
                 }
             } catch (e: Exception) {
-                Log.e("GIST_TEST", "Error fetching Gist data", e)
+                Log.e("NETWORK_TEST", "Error fetching network data", e)
             }
         }
 
