@@ -1,6 +1,7 @@
 package com.juanpaxi.nia
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,11 +11,34 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
+import com.juanpaxi.nia.core.network.NiaNetworkDataSource
 import com.juanpaxi.nia.ui.theme.NiATheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var networkDataSource: NiaNetworkDataSource
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            try {
+                val topics = networkDataSource.getTopics()
+                Log.d("DEMO_TEST", "Success! Fetched ${topics.size} topics:")
+                topics.forEach { topic ->
+                    Log.d("DEMO_TEST", "Topic: ${topic.name}")
+                }
+            } catch (e: Exception) {
+                Log.e("DEMO_TEST", "Error fetching local demo data", e)
+            }
+        }
+
         enableEdgeToEdge()
         setContent {
             NiATheme {
@@ -30,7 +54,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(
+    name: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = "Hello $name!",
         modifier = modifier,
