@@ -7,6 +7,7 @@ import coil3.svg.SvgDecoder
 import coil3.util.DebugLogger
 import com.juanpaxi.nia.core.network.BuildConfig
 import com.juanpaxi.nia.core.network.demo.DemoAssetManager
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,7 +41,7 @@ internal object NetworkModule {
         .addInterceptor(
             HttpLoggingInterceptor()
                 .apply {
-                    if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                    if (BuildConfig.DEBUG) setLevel(HttpLoggingInterceptor.Level.BODY)
                 },
         )
         .build()
@@ -53,7 +54,7 @@ internal object NetworkModule {
     ): ImageLoader = ImageLoader
         .Builder(application)
         .components {
-            add(OkHttpNetworkFetcherFactory(callFactory = { OkHttpClient() }))
+            add(OkHttpNetworkFetcherFactory(callFactory = { okHttpCallFactory.get() }))
             add(SvgDecoder.Factory())
         }
         .apply {
