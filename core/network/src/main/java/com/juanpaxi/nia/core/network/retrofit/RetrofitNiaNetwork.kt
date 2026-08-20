@@ -2,6 +2,8 @@ package com.juanpaxi.nia.core.network.retrofit
 
 import com.juanpaxi.nia.core.network.BuildConfig
 import com.juanpaxi.nia.core.network.NiaNetworkDataSource
+import com.juanpaxi.nia.core.network.model.NetworkChangeList
+import com.juanpaxi.nia.core.network.model.NetworkNewsResource
 import com.juanpaxi.nia.core.network.model.NetworkTopic
 import dagger.Lazy
 import kotlinx.serialization.Serializable
@@ -17,10 +19,25 @@ import javax.inject.Singleton
 
 private interface RetrofitNiaNetworkApi {
 
-    @GET("topic.json")
+    @GET(value = "topics")
     suspend fun getTopics(
         @Query("id") ids: List<String>?,
     ): NetworkResponse<List<NetworkTopic>>
+
+    @GET(value = "newsresources")
+    suspend fun getNewsResources(
+        @Query("id") ids: List<String>?,
+    ): NetworkResponse<List<NetworkNewsResource>>
+
+    @GET(value = "changelists/topics")
+    suspend fun getTopicChangeList(
+        @Query("after") after: Int?,
+    ): List<NetworkChangeList>
+
+    @GET(value = "changelists/newsresources")
+    suspend fun getNewsResourcesChangeList(
+        @Query("after") after: Int?,
+    ): List<NetworkChangeList>
 }
 
 private const val NIA_BASE_URL = BuildConfig.BACKEND_URL
@@ -47,4 +64,10 @@ internal class RetrofitNiaNetwork @Inject constructor(
         .create(RetrofitNiaNetworkApi::class.java)
 
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> = networkApi.getTopics(ids = ids).data
+
+    override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> = networkApi.getNewsResources(ids = ids).data
+
+    override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> = networkApi.getTopicChangeList(after = after)
+
+    override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> = networkApi.getNewsResourcesChangeList(after = after)
 }
